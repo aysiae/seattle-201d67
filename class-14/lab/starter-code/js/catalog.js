@@ -32,22 +32,20 @@ function handleSubmit(event) {
   cart.saveToLocalStorage();
   updateCounter();
   updateCartPreview();
+  document.querySelector('form').reset();
 
 }
 
-// TODO: Add the selected item and quantity to the cart
+// TODO: Add the selected item and quantity to the cart [done]
 function addSelectedItemToCart() {
   // TODO: suss out the item picked from the select list
   // TODO: get the quantity
   // TODO: using those, add one item to the Cart
-  var getItems = document.getElementById('items');
-  var selectedItem = getItems.options[getItems.selectedIndex].text;
-  var getQuantity = document.getElementById('quantity');
-  var quantity = getQuantity.value;
-  cart.addItem(selectedItem,quantity);
+  var addItem = getFormItem();
+  cart.addItem(addItem[0],addItem[1]);
 }
 
-// TODO: Update the cart count in the header nav with the number of items in the Cart
+// TODO: Update the cart count in the header nav with the number of items in the Cart [done]
 function updateCounter() {
   var span = document.getElementById('itemCount');
   var total = 0;
@@ -55,13 +53,32 @@ function updateCounter() {
     var num = Number(cart.items[i].quantity);
     total = total + num;
   }
-  span.textContent = " " + total;
+  span.textContent = ": " + total;
+}
+
+function getFormItem() {
+  var getItems = document.getElementById('items');
+  var selectedItem = getItems.options[getItems.selectedIndex].text;
+  var getQuantity = document.getElementById('quantity');
+  var quantity = getQuantity.value;
+  var itemQuantity = [selectedItem,quantity];
+  return itemQuantity;
 }
 
 // TODO: As you add items into the cart, show them (item & quantity) in the cart preview div
 function updateCartPreview() {
   // TODO: Get the item and quantity from the form
   // TODO: Add a new element to the cartContents div with that information
+  var addItem = getFormItem();
+  if(document.getElementById('cartContents').firstChild != null) {
+    var remove = document.getElementById('cartContents').firstChild;
+    remove.remove();
+  }
+  var position = document.getElementById('cartContents');
+  var paragraph = document.createElement('p');
+  paragraph.textContent = "Item(s) added: " + addItem[1] + " " + addItem[0] + "(s).";
+  position.appendChild(paragraph);
+
 }
 
 // Set up the "submit" event listener on the form.
